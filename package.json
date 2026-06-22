@@ -6,21 +6,63 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "electron": "electron .",
+    "build:standalone": "next build && cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/ && node merge-standalone-nm.js",
+    "pack": "npm run build:standalone && electron-builder --dir",
+    "dist": "npm run build:standalone && electron-builder"
   },
   "dependencies": {
     "next": "16.2.9",
+    "pptxgenjs": "^4.0.1",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "replicate": "^1.4.0"
+  },
+  "overrides": {
+    "@noble/hashes": "1.7.2"
   },
   "devDependencies": {
+    "@electron/packager": "^18.4.4",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "electron": "^35.0.0",
+    "electron-builder": "^26.15.3",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "build": {
+    "appId": "com.yuanbao.cat",
+    "productName": "元宝的小窝",
+    "directories": {
+      "output": "dist"
+    },
+    "asar": false,
+    "mac": {
+      "target": [
+        "dir"
+      ],
+      "icon": "public/icon.png"
+    },
+    "files": [
+      "package.js",
+      "src/**/*",
+      "public/**/*",
+      ".env.local",
+      ".next/**/*",
+      "node_modules/**/*",
+      "next.config.ts",
+      "tsconfig.json",
+      "postcss.config.mjs",
+      "package.json",
+      "merge-standalone-nm.js"
+    ],
+    "extraMetadata": {
+      "main": "package.js"
+    }
   }
 }
